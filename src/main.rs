@@ -94,8 +94,14 @@ fn interpret(env: &HashMap<Name, Variable>, expr: &Expr) -> Value {
             }
         }
         Expr::While(ref expr1, ref expr2) => {
-            while let Value::Bool(true) = interpret(env, expr1) {
-                interpret(env, expr2);
+            while true {
+                match interpret(env, expr1) {
+                    Value::Bool(true) => {
+                        interpret(env, expr2);
+                    }
+                    Value::Bool(false) => break,
+                    _ => panic!("Type error!"),
+                }
             }
             Value::Bool(false)
         }
@@ -423,4 +429,9 @@ fn main() {
     if let Staged::Bool(bool) = stage(&HashMap::new(), &expr) {
         println!("{:?}", bool());
     }
+}
+
+enum Variable {
+    Number(Cell<i64>),
+    Bool(Cell<bool>),
 }
