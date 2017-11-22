@@ -430,8 +430,3 @@ fn main() {
         println!("{:?}", bool());
     }
 }
-
-enum Variable {
-    Number(Cell<i64>),
-    Bool(Cell<bool>),
-}
